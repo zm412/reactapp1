@@ -7,7 +7,8 @@ const LibraryView = observer(({ getDetalesFunc, detales }) => {
   const [nodeInfo, setNodeInfo] = useState(null);
   let data = lib.data;
   let tree = lib.tree;
-  console.log(data ? data : "", "data");
+  console.log(data ? data.length : "", "data");
+  console.log(data ? data : "", "collection");
   console.log(lib.tree, "tree");
 
   const clickNode = (e) => {

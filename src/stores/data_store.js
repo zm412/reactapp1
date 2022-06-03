@@ -20,6 +20,7 @@ class Library {
       this.get_library();
     }
   }
+
   removeNode(id) {
     const removeItem = (id) => {
       let node = this.data.find((n) => n.id == id);
@@ -53,11 +54,8 @@ class Library {
   }
 
   removeElement(id) {
-    console.log(id, "id");
     let filteredArr = this.data.filter((n) => n.id !== id);
-    console.log(filteredArr, "arr");
     this.data = filteredArr;
-    console.log(this.data, "thisdata");
   }
 
   getNodes(obj) {
@@ -73,7 +71,23 @@ class Library {
   }
 
   get tree() {
-    return this.createTree(this.data);
+    return this.createTree2(this.data);
+  }
+
+  createTree2(array = []) {
+    var map = new Map();
+
+    for (const i in array) {
+      let item = array[i];
+      if (map.has(item.parentId)) map.get(item.parentId).push(item);
+      else map.set(item.parentId, [item]);
+    }
+    for (const [parentId, items] of map)
+      for (const item of items)
+        if (map.has(item.id)) item.children = map.get(item.id);
+
+    console.log(map, "map");
+    return map.get(-1);
   }
 
   createTree(arr) {
@@ -81,34 +95,32 @@ class Library {
     if (!arr || !arr.length) {
       return [];
     }
-    let tree = [],
-      map = new Map();
-    for (let i = 0, len = arr.length; i < len; ++i) {
-      let item = JSON.parse(JSON.stringify(arr[i]));
-      //console.log(map, "map");
-      let mapItem = map.get(item.id);
+
+    let tree = arr.reduce((total, n, i) => {
+      let newmap = new Map();
+      let mapItem = newmap.get(n.id);
       if (!mapItem || Array.isArray(mapItem)) {
         if (mapItem) {
-          item.children = mapItem;
+          n.children = mapItem;
         }
-        map.set(item.id, item);
+        newmap.set(n.id, n);
       }
 
-      if (item.parentId === -1) {
-        tree.push(item);
+      if (n.parentId === -1) {
+        total.push(n);
       } else {
-        let parentItem = map.get(item.parentId);
+        let parentItem = newmap.get(n.parentId);
         if (!parentItem) {
-          map.set(item.parentId, [item]);
+          newmap.set(n.parentId, [n]);
         } else {
           let children = Array.isArray(parentItem)
             ? parentItem
             : (parentItem.children = parentItem.children || []);
-          console.log(children, item, "children");
-          children.push(item);
+          children.push(n);
         }
       }
-    }
+      return total;
+    }, []);
     console.log(tree, "treeIII");
     return tree;
   }
