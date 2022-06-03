@@ -1,0 +1,80 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,600&subset=latin,cyrillic);
+
+@media (max-width: 991px) {
+  .sub1 {
+    padding: 20px;
+  }
+}
+
+@media (min-width: 992px) {
+  .sub1 {
+    padding: 40px;
+  }
+}
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.main_block {
+  border: white solid 2px;
+  padding: 10px;
+}
+
+.display_none {
+  display: none;
+}
+
+.list_b {
+  overflow-y: scroll;
+}
+
+.sub1 {
+  height: 80vh;
+  border: white solid 2px;
+  margin: 10px;
+}
+
+.buttom_style {
+  vertical-align: bottom;
+}
+
+.all_white {
+  color: white;
+  border: white solid 2px;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
