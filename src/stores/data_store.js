@@ -23,8 +23,7 @@ class Library {
   removeNode(id) {
     const removeItem = (id) => {
       let node = this.data.find((n) => n.id == id);
-      if (!node.children) {
-      } else {
+      if (node.children) {
         node.children.forEach((n) => {
           removeItem(n.id);
         });
@@ -74,14 +73,18 @@ class Library {
   }
 
   get tree() {
-    let arr = this.data;
+    return this.createTree(this.data);
+  }
+
+  createTree(arr) {
+    console.log(arr, "arr");
     if (!arr || !arr.length) {
       return [];
     }
     let tree = [],
       map = new Map();
     for (let i = 0, len = arr.length; i < len; ++i) {
-      let item = arr[i];
+      let item = JSON.parse(JSON.stringify(arr[i]));
       //console.log(map, "map");
       let mapItem = map.get(item.id);
       if (!mapItem || Array.isArray(mapItem)) {
@@ -101,6 +104,7 @@ class Library {
           let children = Array.isArray(parentItem)
             ? parentItem
             : (parentItem.children = parentItem.children || []);
+          console.log(children, item, "children");
           children.push(item);
         }
       }
@@ -121,6 +125,7 @@ class Library {
             "entityLabelPages"
           ][0];
           let temp2 = this.getNodes(temp);
+          console.log(temp2, "ROW");
           this.data = temp2;
         });
       })
