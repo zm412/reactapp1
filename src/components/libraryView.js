@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { useState, useEffect } from "react";
 import lib from "../stores/data_store.js";
-import small_d from "../stores/small_data.js";
+import LiPoint from "./liPoint.js";
 
 const LibraryView = observer(({ getDetalesFunc, detales }) => {
   const [nodeInfo, setNodeInfo] = useState(null);
@@ -22,27 +22,15 @@ const LibraryView = observer(({ getDetalesFunc, detales }) => {
     let result = arr.map((node, i) => {
       let none_displ_class = node.parentId != -1 ? "display_none" : "";
       if (!node.children) {
-        return (
-          <li
-            key={i}
-            onClick={clickNode}
-            className={"def-mark"}
-            data-key={node.id}
-          >
-            {node.label}
-          </li>
-        );
+        return <LiPoint node={node} key={node.id} func={clickNode} />;
       } else {
         return (
-          <li
-            data-key={node.id}
-            className={"def-mark "}
-            onClick={clickNode}
-            key={i}
-          >
-            {node.label}
-            <ol>{createList(node.children)}</ol>
-          </li>
+          <LiPoint
+            node={node}
+            func={clickNode}
+            key={node.id}
+            children={createList(node.children)}
+          />
         );
       }
     });

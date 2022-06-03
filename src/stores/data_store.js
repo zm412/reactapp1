@@ -10,9 +10,7 @@ class Library {
   data = null;
 
   constructor() {
-    makeAutoObservable(this, {
-      tree: computed,
-    });
+    makeAutoObservable(this);
 
     if (this.data) {
       return this.data;
@@ -24,6 +22,7 @@ class Library {
   removeNode(id) {
     const removeItem = (id) => {
       let node = this.data.find((n) => n.id == id);
+      console.log(node, "thisnode");
       if (node.children) {
         node.children.forEach((n) => {
           removeItem(n.id);
