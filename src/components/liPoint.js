@@ -12,22 +12,26 @@ const LiPoint = observer(({ node, children, id, moveListItem }) => {
     type: "item",
     item: { id: node.id },
     collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
+      isDragging: !!monitor.isDragging(),
     }),
   });
 
   const [{ isOver }, dropRef] = useDrop(() => {
     return {
       accept: "item",
-      drop: (item, monitor) => {
+      hover: (item, monitor) => {
         console.log(item, "item1");
         console.log(node.id, "parent1");
         const dragIndex = item.id;
         const hoverIndex = node.id;
-        lib.moveNode(dragIndex, hoverIndex);
+        console.log(isOver, "isOver");
+        if (dragIndex && hoverIndex) return lib.moveNode(dragIndex, hoverIndex);
         console.log(dragIndex, hoverIndex, "indexes1");
         item.index = hoverIndex;
       },
+      collect: (monitor) => ({
+        isOver: !!monitor.isOver(),
+      }),
     };
   });
   const ref = useRef(null);
@@ -46,6 +50,7 @@ const LiPoint = observer(({ node, children, id, moveListItem }) => {
       ref={dragDropRef}
       className={"def-mark "}
       onClick={clickNode}
+      style={{ color: isDragging ? "pink" : "" }}
     >
       {node.label}
       {children && <ol>{children}</ol>}

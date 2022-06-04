@@ -2,7 +2,6 @@
 import "./App.css";
 import lib from "./stores/data_store.js";
 import node_sp from "./stores/small_data.js";
-import Card from "./components/card.js";
 import LibraryView from "./components/libraryView.js";
 import InfoBlock from "./components/infoBlock.js";
 import { useState, useEffect } from "react";

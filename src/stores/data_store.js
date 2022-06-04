@@ -18,16 +18,19 @@ class Library {
       this.get_library();
     }
   }
-
   moveNode(id, newParentId) {
-    console.log(id, newParentId, "LJLJLJ");
-    let node = this.data.find((n) => n.id == id);
-    let nodeParent = this.data.find((n) => n.id == newParentId);
-    if (node && nodeParent) {
+    console.log(id, newParentId, "kkkk");
+    let node = this.data.find((n) => n.id === id);
+    let oldParentNode = this.data.find((n) => n.id === node.parentId);
+    let nodeParent = this.data.find((n) => n.id === newParentId);
+    if (node && nodeParent && oldParentNode) {
+      oldParentNode.children = oldParentNode.children.filter(
+        (n) => n.id !== node.id
+      );
       node.parentId = newParentId;
+
+      this.getChildrenNodes();
     }
-    console.log(node, "newnid");
-    console.log(this.data, "data");
   }
 
   removeNode(id) {
@@ -43,6 +46,7 @@ class Library {
     };
     removeItem(id);
     console.log(this.data.length, "thisdata");
+    this.getChildrenNodes();
   }
 
   refreshData() {
@@ -88,23 +92,6 @@ class Library {
     return this.createTree2(this.data);
   }
 
-  createTree2(array = []) {
-    console.log(array, "arr");
-    var map = new Map();
-
-    for (const i in array) {
-      let item = array[i];
-      if (map.has(item.parentId)) map.get(item.parentId).push(item);
-      else map.set(item.parentId, [item]);
-    }
-    for (const [parentId, items] of map)
-      for (const item of items)
-        if (map.has(item.id)) item.children = map.get(item.id);
-
-    console.log(map.get(-1), "map");
-    return map.get(-1);
-  }
-
   createTree(arr) {
     console.log(arr, "arr");
     if (!arr || !arr.length) {
@@ -144,6 +131,38 @@ class Library {
     return this.data;
   }
 
+  createTree2(array = []) {
+    console.log(array, "arr");
+    var map = new Map();
+
+    for (const i in array) {
+      let item = array[i];
+      if (map.has(item.parentId)) map.get(item.parentId).push(item);
+      else map.set(item.parentId, [item]);
+    }
+    console.log(map.get(-1), "map");
+    return map.get(-1);
+  }
+  getChildrenNodes() {
+    var map = new Map();
+
+    for (const i in this.data) {
+      let item = this.data[i];
+      if (map.has(item.parentId)) {
+        map.get(item.parentId).push(item);
+      } else {
+        map.set(item.parentId, [item]);
+      }
+    }
+    for (const [parentId, items] of map) {
+      for (const item of items) {
+        if (map.has(item.id)) {
+          item.children = map.get(item.id);
+        }
+      }
+    }
+  }
+
   get_library() {
     fetch("https://api.github.com/gists/e1702c1ef26cddd006da989aa47d4f62")
       .then((res) => {
@@ -154,6 +173,7 @@ class Library {
           let temp2 = this.getNodes(temp);
           console.log(temp2, "ROW");
           this.data = temp2;
+          this.getChildrenNodes();
         });
       })
       .catch((err) => {
