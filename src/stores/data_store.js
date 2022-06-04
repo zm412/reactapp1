@@ -12,6 +12,7 @@ class Library {
       this.get_library();
     }
   }
+
   moveNode(id, newParentId) {
     let node = this.data.find((n) => n.id === id);
     let oldParentNode = this.data.find((n) => n.id === node.parentId);
@@ -21,7 +22,6 @@ class Library {
         (n) => n.id !== node.id
       );
       node.parentId = newParentId;
-
       this.getChildrenNodes();
     }
   }
@@ -98,23 +98,21 @@ class Library {
     }
   }
 
-  get_library() {
-    fetch("https://api.github.com/gists/e1702c1ef26cddd006da989aa47d4f62")
-      .then((res) => {
-        res.json().then((data) => {
-          let temp = JSON.parse(data.files["view.json"].content)[
-            "entityLabelPages"
-          ][0];
-          let temp2 = this.getNodes(temp);
-          this.data = temp2;
-          this.getChildrenNodes();
-        });
-      })
-      .catch((err) => {});
-  }
-
-  get_tree() {
-    return this.tree;
+  async get_library() {
+    try {
+      let response = await fetch(
+        "https://api.github.com/gists/e1702c1ef26cddd006da989aa47d4f62"
+      );
+      let data = await response.json();
+      let temp = JSON.parse(data.files["view.json"].content)[
+        "entityLabelPages"
+      ][0];
+      let temp2 = this.getNodes(temp);
+      this.data = temp2;
+      this.getChildrenNodes();
+    } catch (e) {
+      console.error(e);
+    }
   }
 }
 export default new Library();
