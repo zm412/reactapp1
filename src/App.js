@@ -18,6 +18,11 @@ const App = observer(() => {
     node_sp.clearNode();
   };
 
+  const showData = () => {
+    let freshData = JSON.parse(JSON.stringify(lib.tree));
+    console.log(freshData);
+  };
+
   return (
     <div className="App">
       <header className="App-header">
@@ -40,6 +45,9 @@ const App = observer(() => {
                 </button>
               </div>
             )}
+            <button onClick={showData} className="btn btn-secondary m-3">
+              Apply
+            </button>
           </div>
         </div>
       </header>
