@@ -29,7 +29,7 @@ const App = observer(() => {
             {nodeInfo && (
               <div className="d-grid gap-2 d-md-flex justify-content-md-end">
                 <button
-                  onClick={(e) => lib.refresh()}
+                  onClick={(e) => lib.refreshData()}
                   className="btn btn-secondary m-3"
                 >
                   Refresh

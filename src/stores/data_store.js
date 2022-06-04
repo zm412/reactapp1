@@ -45,6 +45,10 @@ class Library {
     console.log(this.data.length, "thisdata");
   }
 
+  refreshData() {
+    this.get_library();
+  }
+
   rmById(id) {
     let rmQueque = [id];
     for (let i = 0; i < rmQueque.length; i++) {
