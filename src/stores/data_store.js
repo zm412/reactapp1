@@ -20,6 +20,7 @@ class Library {
   }
 
   moveNode(id, newParentId) {
+    console.log(id, newParentId, "LJLJLJ");
     let node = this.data.find((n) => n.id == id);
     let nodeParent = this.data.find((n) => n.id == newParentId);
     if (node && nodeParent) {
