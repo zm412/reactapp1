@@ -1,10 +1,4 @@
-import {
-  makeAutoObservable,
-  autorun,
-  computed,
-  observable,
-  action,
-} from "mobx";
+import { makeAutoObservable } from "mobx";
 
 class Library {
   data = null;
@@ -19,7 +13,6 @@ class Library {
     }
   }
   moveNode(id, newParentId) {
-    console.log(id, newParentId, "kkkk");
     let node = this.data.find((n) => n.id === id);
     let oldParentNode = this.data.find((n) => n.id === node.parentId);
     let nodeParent = this.data.find((n) => n.id === newParentId);
@@ -35,8 +28,14 @@ class Library {
 
   removeNode(id) {
     const removeItem = (id) => {
-      let node = this.data.find((n) => n.id == id);
-      console.log(node, "thisnode");
+      let node = this.data.find((n) => n.id === id);
+      let oldParentNode = this.data.find((n) => n.id === node.parentId);
+
+      if (oldParentNode) {
+        oldParentNode.children = oldParentNode.children.filter(
+          (n) => n.id !== node.id
+        );
+      }
       if (node.children) {
         node.children.forEach((n) => {
           removeItem(n.id);
@@ -45,35 +44,11 @@ class Library {
       this.data = this.data.filter((n) => n.id !== id);
     };
     removeItem(id);
-    console.log(this.data.length, "thisdata");
     this.getChildrenNodes();
   }
 
   refreshData() {
     this.get_library();
-  }
-
-  rmById(id) {
-    let rmQueque = [id];
-    for (let i = 0; i < rmQueque.length; i++) {
-      for (let j in this.data) {
-        if (this.data[j].id == rmQueque[i]) {
-          this.data.splice(j, 1);
-          j--;
-        } else if (this.data[j].parentId == rmQueque[i]) {
-          rmQueque.push(this.data[j].id);
-          this.data.splice(j, 1);
-          j--;
-        }
-      }
-      console.log(rmQueque, "queque");
-    }
-    console.log(this.data, "newd");
-  }
-
-  removeElement(id) {
-    let filteredArr = this.data.filter((n) => n.id !== id);
-    this.data = filteredArr;
   }
 
   getNodes(obj) {
@@ -92,47 +67,7 @@ class Library {
     return this.createTree2(this.data);
   }
 
-  createTree(arr) {
-    console.log(arr, "arr");
-    if (!arr || !arr.length) {
-      return [];
-    }
-
-    let tree = arr.reduce((total, n, i) => {
-      let newmap = new Map();
-      let mapItem = newmap.get(n.id);
-      if (!mapItem || Array.isArray(mapItem)) {
-        if (mapItem) {
-          n.children = mapItem;
-        }
-        newmap.set(n.id, n);
-      }
-
-      if (n.parentId === -1) {
-        total.push(n);
-      } else {
-        let parentItem = newmap.get(n.parentId);
-        if (!parentItem) {
-          newmap.set(n.parentId, [n]);
-        } else {
-          let children = Array.isArray(parentItem)
-            ? parentItem
-            : (parentItem.children = parentItem.children || []);
-          children.push(n);
-        }
-      }
-      return total;
-    }, []);
-    console.log(tree, "treeIII");
-    return tree;
-  }
-
-  get_data() {
-    return this.data;
-  }
-
   createTree2(array = []) {
-    console.log(array, "arr");
     var map = new Map();
 
     for (const i in array) {
@@ -140,9 +75,9 @@ class Library {
       if (map.has(item.parentId)) map.get(item.parentId).push(item);
       else map.set(item.parentId, [item]);
     }
-    console.log(map.get(-1), "map");
     return map.get(-1);
   }
+
   getChildrenNodes() {
     var map = new Map();
 
@@ -171,14 +106,11 @@ class Library {
             "entityLabelPages"
           ][0];
           let temp2 = this.getNodes(temp);
-          console.log(temp2, "ROW");
           this.data = temp2;
           this.getChildrenNodes();
         });
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }
 
   get_tree() {

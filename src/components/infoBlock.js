@@ -1,10 +1,8 @@
-import { useState, useEffect } from "react";
 import node_sp from "../stores/small_data.js";
 import { observer } from "mobx-react-lite";
 
 const InfoBlock = observer(() => {
   let info = node_sp.node;
-  console.log(info, "infoTTTT");
   let list;
   if (info) {
     list = (

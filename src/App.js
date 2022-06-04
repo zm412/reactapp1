@@ -1,17 +1,22 @@
-//import logo from "./logo.svg";
 import "./App.css";
 import lib from "./stores/data_store.js";
 import node_sp from "./stores/small_data.js";
 import LibraryView from "./components/libraryView.js";
 import InfoBlock from "./components/infoBlock.js";
-import { useState, useEffect } from "react";
-import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 
 const App = observer(() => {
   let nodeInfo = node_sp.node;
-  let tree = lib.tree,
-    data = lib.data;
+
+  const removeItem = () => {
+    lib.removeNode(nodeInfo.id);
+    node_sp.clearNode();
+  };
+
+  const refreshData = () => {
+    lib.refreshData();
+    node_sp.clearNode();
+  };
 
   return (
     <div className="App">
@@ -27,16 +32,10 @@ const App = observer(() => {
 
             {nodeInfo && (
               <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-                <button
-                  onClick={(e) => lib.refreshData()}
-                  className="btn btn-secondary m-3"
-                >
+                <button onClick={refreshData} className="btn btn-secondary m-3">
                   Refresh
                 </button>
-                <button
-                  onClick={(e) => lib.removeNode(nodeInfo.id)}
-                  className="btn btn-secondary m-3"
-                >
+                <button onClick={removeItem} className="btn btn-secondary m-3">
                   Remove
                 </button>
               </div>

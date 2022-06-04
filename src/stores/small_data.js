@@ -1,5 +1,4 @@
-import { makeAutoObservable, observable, action } from "mobx";
-import lib from "../stores/data_store.js";
+import { makeAutoObservable } from "mobx";
 
 class smallData {
   node = null;
@@ -10,7 +9,10 @@ class smallData {
 
   setNode(node) {
     this.node = node;
-    console.log(this.node, "thisnode");
+  }
+
+  clearNode() {
+    this.node = null;
   }
 }
 
