@@ -19,6 +19,16 @@ class Library {
     }
   }
 
+  moveNode(id, newParentId) {
+    let node = this.data.find((n) => n.id == id);
+    let nodeParent = this.data.find((n) => n.id == newParentId);
+    if (node && nodeParent) {
+      node.parentId = newParentId;
+    }
+    console.log(node, "newnid");
+    console.log(this.data, "data");
+  }
+
   removeNode(id) {
     const removeItem = (id) => {
       let node = this.data.find((n) => n.id == id);
@@ -74,6 +84,7 @@ class Library {
   }
 
   createTree2(array = []) {
+    console.log(array, "arr");
     var map = new Map();
 
     for (const i in array) {
@@ -85,7 +96,7 @@ class Library {
       for (const item of items)
         if (map.has(item.id)) item.children = map.get(item.id);
 
-    console.log(map, "map");
+    console.log(map.get(-1), "map");
     return map.get(-1);
   }
 

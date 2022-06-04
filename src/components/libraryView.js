@@ -1,34 +1,29 @@
 import { observer } from "mobx-react-lite";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import lib from "../stores/data_store.js";
 import LiPoint from "./liPoint.js";
+import { useDrag, useDrop } from "react-dnd";
 
-const LibraryView = observer(({ getDetalesFunc, detales }) => {
-  const [nodeInfo, setNodeInfo] = useState(null);
+const LibraryView = observer(() => {
   let data = lib.data;
   let tree = lib.tree;
-  console.log(data ? data.length : "", "data");
-  console.log(data ? data : "", "collection");
-  console.log(lib.tree, "tree");
 
-  const clickNode = (e) => {
-    let temp = data.find((n) => {
-      return n.id == e.target.dataset.key;
-    });
-    getDetalesFunc(temp);
+  const moveListItem = (dragIndex, hoverIndex) => {
+    console.log(dragIndex, hoverIndex, "indexes");
+    lib.moveNode(dragIndex, hoverIndex);
   };
 
   const createList = (arr) => {
     let result = arr.map((node, i) => {
-      let none_displ_class = node.parentId != -1 ? "display_none" : "";
       if (!node.children) {
-        return <LiPoint node={node} key={node.id} func={clickNode} />;
+        return <LiPoint node={node} key={node.id} />;
       } else {
         return (
           <LiPoint
             node={node}
-            func={clickNode}
+            moveListItem={moveListItem}
             key={node.id}
+            id={node.id}
             children={createList(node.children)}
           />
         );

@@ -3,8 +3,9 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { Provider } from "mobx-react";
 import library from "./stores/data_store.js";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -17,9 +18,9 @@ const stores = {
 
 root.render(
   <React.StrictMode>
-    <Provider {...stores}>
+    <DndProvider backend={HTML5Backend}>
       <App />
-    </Provider>
+    </DndProvider>
   </React.StrictMode>
 );
 
