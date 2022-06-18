@@ -114,5 +114,9 @@ class Library {
       console.error(e);
     }
   }
+
+  get_tree() {
+    return this.tree;
+  }
 }
 export default new Library();
